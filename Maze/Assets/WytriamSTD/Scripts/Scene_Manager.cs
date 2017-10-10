@@ -13,8 +13,6 @@ namespace WytriamSTD
 
     public class Scene_Manager : MonoBehaviour
     {
-        
-
         // Use this for initialization
         void Start()
         {

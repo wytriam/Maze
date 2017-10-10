@@ -38,5 +38,10 @@ namespace WytriamSTD
         {
             return gameObject.transform.rotation;
         }
+
+        public void setSpawnPrefab(GameObject _spawnPrefab)
+        {
+            spawnPrefab = _spawnPrefab;
+        }
     }
 }
