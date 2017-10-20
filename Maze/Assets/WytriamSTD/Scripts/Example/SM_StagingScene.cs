@@ -1,20 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace WytriamSTD
 {
 
-    public class DisableOtherCamerasOnStart : MonoBehaviour
+    public class SM_StagingScene : WytriamSTD.Scene_Manager
     {
-        private GameObject[] otherCameras;
 
         // Use this for initialization
         void Start()
         {
-            otherCameras = GameObject.FindGameObjectsWithTag("MainCamera");
-            foreach (GameObject camera in otherCameras)
-                camera.SetActive(false);
+
         }
 
         // Update is called once per frame
@@ -23,5 +21,4 @@ namespace WytriamSTD
 
         }
     }
-
 }

@@ -14,14 +14,18 @@ namespace WytriamSTD
     {
         //Singleton Implementation
         private static Constants instance;
-        private Constants() { } //private constructor to prevent extra copies
+        //private Constants() { } //private constructor to prevent extra copies
         public static Constants getInstance()
         {
-            if (instance == null)
-            {
-                instance = new Constants();
-            }
+            //if (instance == null)
+            //    instance = new Constants();
             return instance;
+        }
+
+        void Awake()
+        {
+            if (instance == null)
+                instance = this;
         }
 
         // Use this for initialization

@@ -13,6 +13,9 @@ namespace WytriamSTD
 
     public class Scene_Manager : MonoBehaviour
     {
+        //protected WytriamSTD.Constants constants = WytriamSTD.Constants.getInstance();
+        //protected WytriamSTD.Announcements announcements = WytriamSTD.Announcements.getInstance();
+        
         // Use this for initialization
         void Start()
         {
@@ -23,6 +26,12 @@ namespace WytriamSTD
         void Update()
         {
 
+        }
+
+        public void announce(string announcement)
+        {
+            Debug.Log("Scene_Manager::announce() - " + announcement);
+            Announcements.getInstance().DisplayAnnouncement(announcement);
         }
     }
 }

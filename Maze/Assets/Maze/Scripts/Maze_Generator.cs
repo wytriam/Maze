@@ -33,9 +33,10 @@ public class Maze_Generator : MonoBehaviour {
     public bool autoGenerate = false;
 
     public GameObject SpawnPoint;
+    public GameObject SpawnPointParent;
     public GameObject[] spawnablePrefabs;
+    public GameObject[] cSections;
     public GameObject[] eSections;
-    public GameObject[] rSections;
     public GameObject[] sSections;
     public GameObject[] tSections;
     public GameObject[] xSections;
@@ -65,6 +66,7 @@ public class Maze_Generator : MonoBehaviour {
         // keep track of current position in the maze. Starts at the starting position. 
         Vector3 currentPos = startingPosition;
         int x_increment = 10;
+        int y_increment = 6;
         int z_increment = 10;
 
         //split seed into substrings that we can use
@@ -83,14 +85,14 @@ public class Maze_Generator : MonoBehaviour {
             // assign the appropriate section
             switch (prefabChar)
             {
+                case 'C':
+                    prefab = cSections;
+                    break;
                 case 'E':
                     prefab = eSections;
                     break;
                 case 'G':
                     prefab = spawnablePrefabs;
-                    break;
-                case 'R':
-                    prefab = rSections;
                     break;
                 case 'S':
                     prefab = sSections;
@@ -102,7 +104,9 @@ public class Maze_Generator : MonoBehaviour {
                     prefab = xSections;
                     break;
                 case '0':
+                    break;
                 default:
+                    Debug.Log("Maze_Generator::generateMaze() - Could not recognize maze prefab symbol");
                     break;
             };
 
@@ -114,23 +118,28 @@ public class Maze_Generator : MonoBehaviour {
                 // special instructions to create a proper spawnpoint
                 if (prefab == spawnablePrefabs)
                 {
-                    GameObject spawnpoint = Instantiate(SpawnPoint);
+                    currentPos.x -= x_increment;
+                    GameObject spawnpoint = Instantiate(SpawnPoint, SpawnPointParent.transform);
+                    spawnpoint.name = prefab[index].name + "Spawn";
                     // rotate the object based on the indicated rotation
                     char rotChar = token[1];
                     int rot = int.Parse(rotChar.ToString());
                     spawnpoint.transform.Rotate(new Vector3(0, 90 * rot, 0));
                     // move the object to the appropriate location
                     spawnpoint.transform.position = currentPos;
+                    WytriamSTD.Spawn s = spawnpoint.GetComponent<WytriamSTD.Spawn>();
+                    s.setSpawnPrefab(prefab[index]);
                     if (token.Length > 3)
+                    {
                         if (int.Parse(token[3].ToString()) == 1)
-                            spawnpoint.GetComponent<WytriamSTD.Spawn>().spawnWhenTriggered = true;
-
-
-
+                            s.spawnWhenTriggered = true;
+                    }
+                    else
+                        s.spawn();
                 }
                 else
                 {
-                    GameObject go = Instantiate(prefab[index]);
+                    GameObject go = Instantiate(prefab[index], gameObject.transform);
                     // rotate the object based on the indicated rotation
                     char rotChar = token[1];
                     int rot = int.Parse(rotChar.ToString());
@@ -147,6 +156,12 @@ public class Maze_Generator : MonoBehaviour {
                 {
                     currentPos.x = startingPosition.x;
                     currentPos.z += z_increment;
+                }
+                if(token[3] == 'F')
+                {
+                    currentPos.x = startingPosition.x;
+                    currentPos.y += y_increment;
+                    currentPos.z = startingPosition.z;
                 }
                 //stop generation on a j
                 else if (token[3] == 'J')
